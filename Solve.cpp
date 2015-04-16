@@ -14,7 +14,7 @@ bool FindUnassignedLocation(int grid [N][N], int &row, int &col);
 
 bool Safe(int grid[N][N], int row, int col, int num);
 
-int CopyGrid(int grid[N][N])
+void CopyGrid(int grid[N][N])
 {
    int row;
    int col;
@@ -25,18 +25,42 @@ int CopyGrid(int grid[N][N])
 	  for (col=0; col<N; col++)
 	  {
 		 gridCopy[row][col]=grid[row][col];
-		 cout << gridCopy[row][col];
 	  }
-
-	  cout << endl;
    }
+}
+
+bool SolveSudokuOnce (int gridCopy[N][N])
+{
+   int grid[N][N];
+
+   CopyGrid (grid);
+
+   int row;
+   int col;
+
+   if (!FindUnassignedLocation(gridCopy, row, col))
+	  return true;
+
+   for (int num=1; num<=9; num++)
+   {
+	  if (Safe (gridCopy, row, col, num))
+	  {
+		 gridCopy[row][col]= num;
+
+		 if (SolveSudokuOnce(gridCopy))
+			return true;
+
+		 gridCopy[row][col]= UNASSIGNED;
+	  }
+   }
+
+   return false;
 }
 
 bool SolveSudoku (int grid[N][N])
 {
    int row;
    int col;
-   int gridCheck[N][N];
 
    if (!FindUnassignedLocation(grid, row, col))
 	  return true;
@@ -125,9 +149,18 @@ int main()
 	  {0,6,8,7,9,5,4,3,0}
    };
 
-   int CopyGrid(grid[N][N]);
+   CopyGrid(grid);
 
    if (SolveSudoku(grid) == true)
+   {
+	  cout << "1" << endl;
+	  PrintGrid(grid);
+   }
+
+   else
+	  cout << "0" << endl;
+
+   if (SolveSudokuOnce(grid) == true)
    {
 	  cout << "1" << endl;
 	  PrintGrid(grid);
