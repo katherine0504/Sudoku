@@ -4,5 +4,8 @@
 
 int main()
 {
+   Sudoku ss;
+   ss.Solve();
+
 }
 
