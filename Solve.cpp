@@ -14,49 +14,6 @@ bool FindUnassignedLocation(int grid [N][N], int &row, int &col);
 
 bool Safe(int grid[N][N], int row, int col, int num);
 
-void CopyGrid(int grid[N][N])
-{
-   int row;
-   int col;
-   int gridCopy[N][N];
-
-   for (row=0; row<N; row++)
-   {
-	  for (col=0; col<N; col++)
-	  {
-		 gridCopy[row][col]=grid[row][col];
-	  }
-   }
-}
-
-bool SolveSudokuOnce (int gridCopy[N][N])
-{
-   int grid[N][N];
-
-   CopyGrid (grid);
-
-   int row;
-   int col;
-
-   if (!FindUnassignedLocation(gridCopy, row, col))
-	  return true;
-
-   for (int num=1; num<=9; num++)
-   {
-	  if (Safe (gridCopy, row, col, num))
-	  {
-		 gridCopy[row][col]= num;
-
-		 if (SolveSudokuOnce(gridCopy))
-			return true;
-
-		 gridCopy[row][col]= UNASSIGNED;
-	  }
-   }
-
-   return false;
-}
-
 bool SolveSudoku (int grid[N][N])
 {
    int row;
@@ -70,6 +27,8 @@ bool SolveSudoku (int grid[N][N])
 	  if (Safe (grid, row, col, num))
 	  {
 		 grid[row][col]= num;
+		 
+		 cout << "Once" << " " << row << " " << col << " " << num << endl;
 
 		 if (SolveSudoku(grid))
 			return true;
@@ -79,6 +38,51 @@ bool SolveSudoku (int grid[N][N])
    }
    
    return false;
+}
+
+bool SolveAgain(int gridCopy[N][N])
+{
+   int row;
+   int col;
+   
+   if (!FindUnassignedLocation(gridCopy, row, col))
+	  return true;
+
+   for (int num=9; num>=1; num--)
+	{
+	    if (Safe (gridCopy, row, col, num))
+		{
+		   gridCopy[row][col]= num;
+		   cout << "Again" << " " << row << " " << col << " " << num << endl;
+
+		   if (SolveSudoku(gridCopy))
+			  return true;
+
+		   gridCopy[row][col]= UNASSIGNED;
+		}
+	}
+
+   return false;
+}
+
+bool SolveSudokuOnce (int grid[N][N])
+{
+   int gridCopy[N][N];
+   int row;
+   int col;
+
+   for (row= 0; row <N; row++)
+   {
+	  for (col=0; col<N; col++)
+		 gridCopy[row][col]= grid[N][N];
+   }
+
+   SolveAgain(gridCopy);
+
+   if (SolveAgain(gridCopy) == true)
+	  return true;
+   else
+	  return false;
 }
 
 bool FindUnassignedLocation(int grid [N][N], int &row, int &col)
@@ -149,7 +153,7 @@ int main()
 	  {0,6,8,7,9,5,4,3,0}
    };
 
-   CopyGrid(grid);
+   //CopyGrid(grid);
 
    if (SolveSudoku(grid) == true)
    {
