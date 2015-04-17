@@ -4,7 +4,6 @@
 
 
 #define UNASSIGNED 0
-#define BLANK -1
 
 #define N 12
 #define SQN 2
@@ -29,7 +28,7 @@ bool SolveSudoku (int grid[N][N])
 	  {
 		 grid[row][col]= num;
 		 
-		 cout << "Once" << " " << row << " " << col << " " << num << endl;
+		 //cout << "Once" << " " << row << " " << col << " " << num << endl;
 
 		 if (SolveSudoku(grid))
 			return true;
@@ -55,7 +54,7 @@ bool SolveBackwards (int grid_1[N][N])
 	  {
 		 grid_1[row][col]= num;
 
-		 cout << "Twice" << " " << row << " " << col << " " << num << endl;
+		 //cout << "Twice" << " " << row << " " << col << " " << num << endl;
 
 		 if (SolveBackwards(grid_1))
 			return true;
@@ -128,8 +127,8 @@ int main()
 	  {0, 0, 3, 9, 5, 1, 6, 0, 4, -1,-1,-1},
 	  {9, 0, 1, 6, 2, 4, 8, 0, 0, -1,-1,-1},
 	  {-1,-1,-1, 1, 3, 2, 0, 8, 7, 9, 5, 6},
-	  {-1,-1,-1, 0, 8, 0, 1, 9, 0, 4, 2, 0},
-	  {-1,-1,4, -1, 9, 6, 2, 3, 0, 8, 7, 1},
+	  {-1,-1,0, -1, 8, 0, 1, 9, 0, 4, 2, 0},
+	  {-1,-1,-1, 4, 9, 6, 2, 3, 0, 8, 7, 1},
 	  {1, 0, 0, 0, 4, 0, -1,-1,-1, 6, 9, 5},
 	  {0, 0, 4, 0, 6, 0, -1,-1,-1, 1, 3, 7},
 	  {6, 9, 5, 0, 1, 7, -1,-1,-1, 2, 8, 4},
@@ -141,6 +140,7 @@ int main()
    int grid_1[N][N];
    int row;
    int col;
+   int check=1;
 
    for (row= 0; row< N; row++)
    {
@@ -148,33 +148,50 @@ int main()
 		 grid_1[row][col]=grid[row][col];
    }
 
-   if (SolveSudoku(grid) == true)
+   if (SolveSudoku(grid) != true)
    {
-	  cout << "1" << endl;
-	  PrintGrid(grid);
+	  cout << "0" << endl;
    }
 
-   else
-	  cout << "0" << endl;
-
-   if (SolveBackwards(grid_1) == true)
+   if ((SolveSudoku(grid)) && (SolveBackwards(grid_1)))
    {
-	  cout << "1" << endl;
-	  PrintGrid(grid_1);
+	  for (row= 0; row< N; row++)
+	  {
+		 for (col=0; col<N; col++)
+			if (grid[row][col] != grid_1[row][col])
+			{
+			   cout << "2" << endl;
+			   check=2;
+			   break;
+			}
+		 break;
+		 
+	  }
    }
-
-   else
-	  cout << "0" << endl;
-
-   for (row= 0; row< N; row++)
+   
+   if (check == 1)
    {
-	  for (col=0; col<N; col++)
-		 if (grid[row][col] != grid_1[row][col])
+   if ((SolveSudoku(grid)) && (SolveBackwards(grid_1)))
+   {
+	  int i=1;
+
+	  for (row= 0; row< N; row++)
+	  {
+		 for (col=0; col<N; col++)
 		 {
-			cout << "2" << endl;
-			break;
+			if (grid[row][col] == grid_1[row][col])
+			{
+			   while (i == 1)
+			   {
+				  cout << i << endl;
+				  i++;
+			   }
+			   cout << setw(3) << grid[row][col];
+			}
 		 }
-	  break;
+		 cout << "\n";
+	  }
+   }
    }
 
    return 0;
