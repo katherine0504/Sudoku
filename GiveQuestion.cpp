@@ -62,6 +62,14 @@ void PrintGrid (int grid[N][N])
    }
 }
 
+bool Create ()
+{
+   int row;
+   int col;
+
+   if (!FindUnassignedLocation(grid, row, col)
+
+		 }
 int main()
 {
    int grid[N][N]={

@@ -4,8 +4,9 @@
 
 
 #define UNASSIGNED 0
+#define BLANK -1
 
-#define N 9
+#define N 12
 #define SQN 2
 
 using namespace std;
@@ -40,49 +41,30 @@ bool SolveSudoku (int grid[N][N])
    return false;
 }
 
-bool SolveAgain(int gridCopy[N][N])
+bool SolveBackwards (int grid_1[N][N])
 {
    int row;
    int col;
-   
-   if (!FindUnassignedLocation(gridCopy, row, col))
+
+   if (!FindUnassignedLocation(grid_1, row, col))
 	  return true;
 
    for (int num=9; num>=1; num--)
-	{
-	    if (Safe (gridCopy, row, col, num))
-		{
-		   gridCopy[row][col]= num;
-		   cout << "Again" << " " << row << " " << col << " " << num << endl;
-
-		   if (SolveSudoku(gridCopy))
-			  return true;
-
-		   gridCopy[row][col]= UNASSIGNED;
-		}
-	}
-
-   return false;
-}
-
-bool SolveSudokuOnce (int grid[N][N])
-{
-   int gridCopy[N][N];
-   int row;
-   int col;
-
-   for (row= 0; row <N; row++)
    {
-	  for (col=0; col<N; col++)
-		 gridCopy[row][col]= grid[N][N];
+	  if (Safe (grid_1, row, col, num))
+	  {
+		 grid_1[row][col]= num;
+
+		 cout << "Twice" << " " << row << " " << col << " " << num << endl;
+
+		 if (SolveBackwards(grid_1))
+			return true;
+
+		 grid_1[row][col]= UNASSIGNED;
+	  }
    }
 
-   SolveAgain(gridCopy);
-
-   if (SolveAgain(gridCopy) == true)
-	  return true;
-   else
-	  return false;
+   return false;
 }
 
 bool FindUnassignedLocation(int grid [N][N], int &row, int &col)
@@ -142,18 +124,29 @@ void PrintGrid (int grid[N][N])
 int main()
 {
    int grid[N][N]={
-	  {9,8,5,3,6,0,0,7,4},
-	  {7,0,0,8,0,9,3,5,6},
-	  {6,3,0,4,5,7,0,9,8},
-	  {8,0,0,9,3,6,7,0,5},
-	  {3,5,9,0,7,8,6,4,0},
-	  {0,7,6,5,0,4,9,8,3},
-	  {5,0,7,6,4,3,8,0,9},
-	  {4,9,3,0,8,0,5,6,7},
-	  {0,6,8,7,9,5,4,3,0}
+	  {4, 2, 6, 8, 7, 3, 9, 5, 1, -1,-1,-1},
+	  {0, 0, 3, 9, 5, 1, 6, 0, 4, -1,-1,-1},
+	  {9, 0, 1, 6, 2, 4, 8, 0, 0, -1,-1,-1},
+	  {-1,-1,-1, 1, 3, 2, 0, 8, 7, 9, 5, 6},
+	  {-1,-1,-1, 0, 8, 0, 1, 9, 0, 4, 2, 0},
+	  {-1,-1,4, -1, 9, 6, 2, 3, 0, 8, 7, 1},
+	  {1, 0, 0, 0, 4, 0, -1,-1,-1, 6, 9, 5},
+	  {0, 0, 4, 0, 6, 0, -1,-1,-1, 1, 3, 7},
+	  {6, 9, 5, 0, 1, 7, -1,-1,-1, 2, 8, 4},
+	  {3, 1, 2, -1,-1,-1, 7, 4, 0, 5, 0, 9},
+	  {7, 4, 8, -1,-1,-1, 0, 6, 9, 3, 0, 2},
+	  {0, 6, 0, -1,-1,-1, 3, 1, 0, 7, 0, 8}
    };
 
-   //CopyGrid(grid);
+   int grid_1[N][N];
+   int row;
+   int col;
+
+   for (row= 0; row< N; row++)
+   {
+	  for (col=0; col< N; col++)
+		 grid_1[row][col]=grid[row][col];
+   }
 
    if (SolveSudoku(grid) == true)
    {
@@ -164,14 +157,25 @@ int main()
    else
 	  cout << "0" << endl;
 
-   if (SolveSudokuOnce(grid) == true)
+   if (SolveBackwards(grid_1) == true)
    {
 	  cout << "1" << endl;
-	  PrintGrid(grid);
+	  PrintGrid(grid_1);
    }
 
    else
 	  cout << "0" << endl;
+
+   for (row= 0; row< N; row++)
+   {
+	  for (col=0; col<N; col++)
+		 if (grid[row][col] != grid_1[row][col])
+		 {
+			cout << "2" << endl;
+			break;
+		 }
+	  break;
+   }
 
    return 0;
 }
