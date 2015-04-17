@@ -1,8 +1,9 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <ctime>
 
-#define N 12
+#define N 9
 #define SQN 2
 #define UNASSIGNED 0
 
@@ -47,7 +48,7 @@ bool UsedInBox (int grid[N][N], int boxStartRow, int boxStartCol, int num)
 	  
 bool Safe (int grid[N][N], int row, int col, int num)
 {
-   return !UsedInRow(grid, row, col, num) && !UsedInCol(grid, row, col, num) && !UsedInBox(grid, row-(row%SQN), col-(col%SQN), num);
+   return (!UsedInRow(grid, row, col, num) && !UsedInCol(grid, row, col, num) && !UsedInBox(grid, row-(row%SQN), col-(col%SQN), num));
 }
 
 void PrintGrid (int grid[N][N])
@@ -62,32 +63,63 @@ void PrintGrid (int grid[N][N])
    }
 }
 
-bool Create ()
+bool Create(int grid[N][N])
 {
    int row;
    int col;
+   int num;
 
-   if (!FindUnassignedLocation(grid, row, col)
+   srand(time(NULL));
 
+
+   if (!FindLocation(grid, row, col))
+	  return true;
+
+   for (row= 0; row< N; row++)
+   {
+	  for (col= 0; col< N; col++)
+	  {
+		 num= rand()%N+1;
+		 if ( Safe(grid, row, col,num) )
+		 {
+			grid[row][col]=num;
+			cout << col << " " << row << " " << num << endl;
+
+			if ( Create(grid) )
+			   return true;
+			
+			grid[row][col]= UNASSIGNED;
 		 }
+	  }
+   }
+
+   return false;
+}
+
+
 int main()
 {
    int grid[N][N]={
-	  {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	  {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	  {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	  {0, 0, 0, -1,-1,-1, 0, 0, 0, 0, 0, 0 },
-	  {0, 0, 0, -1,-1,-1, 0, 0, 0, 0, 0, 0 },
-	  {0, 0, 0, -1,-1,-1, 0, 0, 0, 0, 0, 0 },
-	  {0, 0, 0, 0, 0, 0, -1,-1,-1, 0, 0, 0 },
-	  {0, 0, 0, 0, 0, 0, -1,-1,-1, 0, 0, 0 },
-	  {0, 0, 0, 0, 0, 0, -1,-1,-1, 0, 0, 0 },
-	  {0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,-1 },
-	  {0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,-1 },
-	  {0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,-1 }
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0},
+	  {0,0,0,0,0,0,0,0,0}
    };
+   
+   int row;
+   int col;
 
-   PrintGrid(grid);
+   if (Create(grid) == true)
+   {
+	  PrintGrid(grid);
+   }
+   else
+	  cout << "DNE" << endl;
 
    return 0;
 }
