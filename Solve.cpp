@@ -22,7 +22,7 @@ bool SolveSudoku (int grid[N][N])
    if (!FindUnassignedLocation(grid, row, col))
 	  return true;
 
-   for (int num=1; num<=9; num++)
+   for ( int num=1; num<=9; num++)
    {
 	  if (Safe (grid, row, col, num))
 	  {
@@ -78,7 +78,7 @@ bool FindUnassignedLocation(int grid [N][N], int &row, int &col)
 
 bool UsedInRow (int grid[N][N], int row, int col, int num)
 {
-   for  (int row=0; row<N; row++)
+   for  ( row=0; row<N; row++)
 	  if (grid[row][col] == num)
 		 return true;
 
@@ -87,7 +87,7 @@ bool UsedInRow (int grid[N][N], int row, int col, int num)
 
 bool UsedInCol (int grid[N][N], int row, int col, int num)
 {
-   for (int col=0; col<N; col++)
+   for ( col=0; col<N; col++)
 	  if (grid[row][col] == num)
 		 return true;
 
@@ -127,7 +127,7 @@ int main()
 	  {0, 0, 3, 9, 5, 1, 6, 0, 4, -1,-1,-1},
 	  {9, 0, 1, 6, 2, 4, 8, 0, 0, -1,-1,-1},
 	  {-1,-1,-1, 1, 3, 2, 0, 8, 7, 9, 5, 6},
-	  {-1,-1,0, -1, 8, 0, 1, 9, 0, 4, 2, 0},
+	  {-1,-1,-1, 0, 8, 0, 1, 9, 0, 4, 2, 0},
 	  {-1,-1,-1, 4, 9, 6, 2, 3, 0, 8, 7, 1},
 	  {1, 0, 0, 0, 4, 0, -1,-1,-1, 6, 9, 5},
 	  {0, 0, 4, 0, 6, 0, -1,-1,-1, 1, 3, 7},

@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iomanip>
 
-#define N 9
+#define N 12
 #define SQN 2
 
 using namespace std;
