@@ -199,15 +199,12 @@ void Sudoku::Solve(void)
 	  {
 		 for (col=0; col<N; col++)
 		 {
-			if (grid_1[row][col] == grid_2[row][col])
-			{
 			   while (i == 1)
 			   {
 				  cout << i << endl;
 				  i++;
 			   }
 			   cout << setw(3) << grid_1[row][col];
-			}
 		 }
 		 cout << "\n";
 	  }
