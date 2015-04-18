@@ -22,13 +22,17 @@ void Sudoku::ReadIn(void)
 	  for (row=0; row<N; row++)
 		 cin >> grid[col][row];
 
-/*   for (col=0; col<N; col++)
+   cout << "READIN--------" << endl;
+
+   for (col=0; col<N; col++)
    {
 	  for (row=0; row<N; row++)
 		 cout << setw(3) << grid[col][row];
 
 	  cout << endl;
-   }*/
+   }
+
+   cout << "------End ReadIn------" <<endl;
 }
 //--------------READ IN--------------------
 
@@ -145,14 +149,22 @@ void Sudoku::Solve(void)
    int row;
    int col;
    int check=1;
+   
+   cout << "Start Solve" << endl;
 
-//   Sudoku::ReadIn();
+   Sudoku::PrintGrid(grid);
 
    for (row= 0; row< N; row++)
    {
 	  for (col=0; col< N; col++)
+	  {
 		 grid_1[row][col]=grid[row][col];
+	  }
    }
+
+   cout << "---Print1---" << endl;
+
+   Sudoku::PrintGrid(grid_1);
 
    if (Sudoku::SolveSudoku(grid) != true)
    {
