@@ -69,9 +69,6 @@ bool Create(int grid[N][N])
    int col;
    int num;
 
-   srand(time(NULL));
-
-
    if (!FindLocation(grid, row, col))
 	  return true;
 
@@ -88,7 +85,7 @@ bool Create(int grid[N][N])
 			if ( Create(grid) )
 			   return true;
 			
-			grid[row][col]= UNASSIGNED;
+//			grid[row][col]= UNASSIGNED;
 		 }
 	  }
    }
@@ -99,6 +96,8 @@ bool Create(int grid[N][N])
 
 int main()
 {
+   srand (time(NULL));
+
    int grid[N][N]={
 	  {0,0,0,0,0,0,0,0,0},
 	  {0,0,0,0,0,0,0,0,0},
