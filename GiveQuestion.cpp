@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#define N 9
+#define N 12
 #define SQN 2
 #define UNASSIGNED 0
 

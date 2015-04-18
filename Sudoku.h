@@ -12,13 +12,13 @@ class Sudoku
 	  void ReadIn(void);
 	  void Solve(void);
 	  
-	  bool FindUnassignedLocation(int grid [N][N], int &row, int &col);
-	  bool Safe(int grid[N][N], int row, int col, int num);
-	  bool SolveSudoku (int grid[N][N]);
-	  bool SolveBackwards (int grid_1[N][N]);
-	  bool UsedInRow (int grid[N][N], int row, int col, int num);
-	  bool UsedInCol (int grid[N][N], int row, int col, int num);
-	  bool UsedInBox (int grid[N][N], int boxStartRow, int boxStartCol, int num);
+	  bool FindUnassignedLocation( int &row, int &col);
+	  bool Safe(int row, int col, int num);
+	  bool SolveSudoku ();
+	  bool SolveBackwards ();
+	  bool UsedInRow (int row, int col, int num);
+	  bool UsedInCol (int row, int col, int num);
+	  bool UsedInBox (int boxStartRow, int boxStartCol, int num);
       void PrintGrid (int grid[N][N]);
       
       void InitialGrid(int grid[N][N]);
@@ -29,6 +29,7 @@ class Sudoku
       void Blank(int grid[N][N], int BlankNum);
 
    private:
+	  int ReadIngrid[N][N];
 
 };
 

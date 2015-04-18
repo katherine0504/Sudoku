@@ -16,18 +16,17 @@ void Sudoku::ReadIn(void)
 {
    int col;
    int row;
-   int grid[N][N];
 
    for (col=0; col<N; col++)
 	  for (row=0; row<N; row++)
-		 cin >> grid[col][row];
+		 cin >> ReadIngrid[col][row];
 
    cout << "READIN--------" << endl;
 
    for (col=0; col<N; col++)
    {
 	  for (row=0; row<N; row++)
-		 cout << setw(3) << grid[col][row];
+		 cout << setw(3) << ReadIngrid[col][row];
 
 	  cout << endl;
    }
@@ -36,103 +35,108 @@ void Sudoku::ReadIn(void)
 }
 //--------------READ IN--------------------
 
+
+
 //--------------SOLVE--------------------
-bool Sudoku::FindUnassignedLocation(int grid [N][N], int &row, int &col)
+bool Sudoku::FindUnassignedLocation(int &row, int &col)
 {
     for (row =0; row< N; row ++)
     for (col=0; col< N; col++)
-	   if (grid [row][col] == UNASSIGNED)
+	   if (ReadIngrid [row][col] == UNASSIGNED)
 	      return true;
 	return false;
 }
 
-bool Sudoku::SolveSudoku (int grid[N][N])
+bool Sudoku::SolveSudoku ()
 {
    int row;
    int col;
 
-   if (!Sudoku::FindUnassignedLocation(grid, row, col))
+   if (!Sudoku::FindUnassignedLocation(row, col))
 	  return true;
 
    for (int num=1; num<=9; num++)
    {
-	  if (Sudoku::Safe (grid, row, col, num))
+	  if (Sudoku::Safe (row, col, num))
 	  {
-		 grid[row][col]= num;
+		 
+		 ReadIngrid[row][col]= num;
 		 
 		 //cout << "Once" << " " << row << " " << col << " " << num << endl;
 
-		 if (Sudoku::SolveSudoku(grid))
+		 if (Sudoku::SolveSudoku())
 			return true;
 
-		 grid[row][col]= UNASSIGNED;
+		 ReadIngrid[row][col]= UNASSIGNED;
 	  }
    }
    
    return false;
 }
 
-bool Sudoku::SolveBackwards (int grid_1[N][N])
+bool Sudoku::SolveBackwards ()
 {
    int row;
    int col;
 
-   if (!Sudoku::FindUnassignedLocation(grid_1, row, col))
+   if (!Sudoku::FindUnassignedLocation(row, col))
 	  return true;
 
    for (int num=9; num>=1; num--)
    {
-	  if (Sudoku::Safe (grid_1, row, col, num))
+	  if (Sudoku::Safe (row, col, num))
 	  {
-		 grid_1[row][col]= num;
+		 ReadIngrid[row][col]= num;
 
 		 //cout << "Twice" << " " << row << " " << col << " " << num << endl;
 
-		 if (Sudoku::SolveBackwards(grid_1))
+		 if (Sudoku::SolveBackwards())
 			return true;
 
-		 grid_1[row][col]= UNASSIGNED;
+		 ReadIngrid[row][col]= UNASSIGNED;
 	  }
    }
 
    return false;
 }
 
-bool Sudoku::UsedInRow (int grid[N][N], int row, int col, int num)
+bool Sudoku::UsedInRow (int row, int col, int num)
 {
    for  (int row=0; row<N; row++)
-	  if (grid[row][col] == num)
+	  if (ReadIngrid[row][col] == num)
 		 return true;
 
    return false;
 }
 
-bool Sudoku::UsedInCol (int grid[N][N], int row, int col, int num)
+bool Sudoku::UsedInCol (int row, int col, int num)
 {
    for (int col=0; col<N; col++)
-	  if (grid[row][col] == num)
+	  if (ReadIngrid[row][col] == num)
 		 return true;
 
    return false;
 }
 
-bool Sudoku::UsedInBox (int grid[N][N], int boxStartRow, int boxStartCol, int num)
+bool Sudoku::UsedInBox (int boxStartRow, int boxStartCol, int num)
 {
    for (int row=0; row< SQN; row++)
 	  for (int col=0; col< SQN; col++)
-		 if (grid[row+boxStartRow][col+boxStartCol] == num)
+		 if (ReadIngrid[row+boxStartRow][col+boxStartCol] == num)
 			return true;
 
    return false;
 }
 
-bool Sudoku::Safe(int grid[N][N], int row, int col, int num)
+bool Sudoku::Safe(int row, int col, int num)
 {
-     return !Sudoku::UsedInRow(grid, row, col, num) && !Sudoku::UsedInCol(grid, row, col, num) && !Sudoku::UsedInBox(grid, row-(row%SQN), col-(col%SQN), num);
+     return !Sudoku::UsedInRow(row, col, num) && !Sudoku::UsedInCol(row, col, num) && !Sudoku::UsedInBox(row-(row%SQN), col-(col%SQN), num);
 }
 
 void Sudoku::PrintGrid (int grid[N][N])
 {
+  // int grid[N][N];
+
    for (int row=0; row<N; row++)
    {
 	  for (int col=0; col<N; col++)
@@ -146,37 +150,77 @@ void Sudoku::Solve(void)
 {
    int grid[N][N];
    int grid_1[N][N];
+   int grid_2[N][N];
+   int grid_temp[N][N];
    int row;
    int col;
    int check=1;
    
    cout << "Start Solve" << endl;
 
-   Sudoku::PrintGrid(grid);
+//   Sudoku::PrintGrid(grid);
 
    for (row= 0; row< N; row++)
    {
 	  for (col=0; col< N; col++)
 	  {
-		 grid_1[row][col]=grid[row][col];
+		 grid_1[row][col]=ReadIngrid[row][col];
+		 grid_2[row][col]=ReadIngrid[row][col];
+		 grid_temp[row][col]=ReadIngrid[row][col];
 	  }
    }
 
    cout << "---Print1---" << endl;
-
    Sudoku::PrintGrid(grid_1);
 
-   if (Sudoku::SolveSudoku(grid) != true)
+   cout << "---Print2---" << endl;
+   Sudoku::PrintGrid(grid_2);
+
+   cout << "---Print temp---"  <<endl;
+   Sudoku::PrintGrid(grid_temp);
+
+   Sudoku::SolveSudoku();
+   for (row= 0; row< N; row++)
+   {
+	  for (col=0; col< N; col++)
+	  {
+		 grid_1[row][col]=ReadIngrid[row][col];
+		 ReadIngrid[row][col]=grid_temp[row][col];
+	  }
+   }
+
+   cout << "---Solved---" <<endl;
+   Sudoku::PrintGrid(grid_1);
+
+   Sudoku::SolveBackwards();
+   for (row= 0; row< N; row++)
+   {
+	  for (col=0; col< N; col++)
+	  {
+		 grid_2[row][col]=ReadIngrid[row][col];
+		 ReadIngrid[row][col]=grid_temp[row][col];
+	  }
+   }
+
+   cout << "---ReadIn After Solved---" << endl;
+   Sudoku::PrintGrid(ReadIngrid);
+
+   cout << "---Solved Backwards---" <<endl;
+   Sudoku::PrintGrid(grid_2);
+
+
+
+   if (Sudoku::SolveSudoku() != true)
    {
 	  cout << "0" << endl;
    }
 
-   if ((Sudoku::SolveSudoku(grid)) && (Sudoku::SolveBackwards(grid_1)))
+   if ((Sudoku::SolveSudoku()) && (Sudoku::SolveBackwards()))
    {
 	  for (row= 0; row< N; row++)
 	  {
 		 for (col=0; col<N; col++)
-			if (grid[row][col] != grid_1[row][col])
+			if (grid_2[row][col] != grid_1[row][col])
 			{
 			   cout << "2" << endl;
 			   check=2;
@@ -189,7 +233,7 @@ void Sudoku::Solve(void)
    
    if (check == 1)
    {
-   if ((Sudoku::SolveSudoku(grid)) && (Sudoku::SolveBackwards(grid_1)))
+   if ((Sudoku::SolveSudoku()) && (Sudoku::SolveBackwards()))
    {
 	  int i=1;
 
@@ -197,14 +241,14 @@ void Sudoku::Solve(void)
 	  {
 		 for (col=0; col<N; col++)
 		 {
-			if (grid[row][col] == grid_1[row][col])
+			if (grid_2[row][col] == grid_1[row][col])
 			{
 			   while (i == 1)
 			   {
 				  cout << i << endl;
 				  i++;
 			   }
-			   cout << setw(3) << grid[row][col];
+			   cout << setw(3) << grid_1[row][col];
 			}
 		 }
 		 cout << "\n";
@@ -214,6 +258,8 @@ void Sudoku::Solve(void)
 }
 
 //--------------SOLVE--------------------   
+
+
 
 //--------------GIVE QUESTION--------------------  
 void Sudoku::InitialGrid(int grid[N][N])
@@ -367,6 +413,7 @@ void Sudoku::Blank(int grid[N][N], int BlankNum)
 	}
 }
 
+
 void Sudoku::GiveQuestion(void)
 {
 	srand(time(NULL));
@@ -409,4 +456,5 @@ void Sudoku::GiveQuestion(void)
 	Sudoku::PrintGrid2(grid);
 
 }
+
 //--------------GIVE QUESTION--------------------
