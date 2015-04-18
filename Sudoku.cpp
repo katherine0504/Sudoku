@@ -146,7 +146,7 @@ void Sudoku::Solve(void)
    int col;
    int check=1;
 
-   Sudoku::ReadIn();
+//   Sudoku::ReadIn();
 
    for (row= 0; row< N; row++)
    {
@@ -300,11 +300,11 @@ bool Sudoku::Create(int grid[N][N])
 /////////////////////////////////////////////////////
 		for (int i = 0; i < 9; i++)
 		{
-			if(error_count >= 100)
+			if(error_count >= 30)
 				break;
 			for(int j = 0; j< 12; j++)//go 9 boxes
 			{
-				if(error_count >= 100)
+				if(error_count >= 30)
 					break;
 				BoxStartRow = ((j/3)*3);
 				BoxStartCol = getBoxStartCol(j);
@@ -318,7 +318,7 @@ bool Sudoku::Create(int grid[N][N])
 					col = BoxStartCol + col_offset;
 					if(Sudoku::isSafe(grid, row, col, num) && grid[row][col] == 0)
 					{
-						if(i == 8 && j == 11 && error_count < 100)
+						if(i == 8 && j == 11 && error_count < 30)
 							restart = 0; // the last element so end the restart
 
 						grid[row][col] = num;						
@@ -328,7 +328,7 @@ bool Sudoku::Create(int grid[N][N])
 					{
 						error_count++;
 					}
-				}while(error_count < 100);
+				}while(error_count < 30);
 			}
 			num++;// num = 1 2 3 4 ... 9
 		}		
@@ -359,17 +359,42 @@ void Sudoku::GiveQuestion(void)
 {
 	srand(time(NULL));
 	int grid[N][N];
+	int grid_1[N][N];
+	int grid_2[N][N];
+	int row;
+	int col;
+	int restart=1;
 
-	if (Sudoku::Create(grid) == true)
+	do 
 	{
-//		cout << "------------ans---------" << endl;
-		Sudoku::PrintGrid2(grid);
-	}
-	else
-		cout << "DNE" << endl;
-	
-	Sudoku::Blank(grid, 30);
-	cout << "------------Blank---------" << endl;
+	   if (Sudoku::Create(grid) != true)
+		  cout << "DNE" << endl;
+	   
+	   Sudoku::Blank(grid, 30);
+	   
+	   for (row=0; row<N; row++)
+	   {
+		  for (col=0; col<N; col++)
+		  {
+			 grid_1[row][col]= grid[row][col];
+			 grid_2[row][col]= grid[row][col];
+		  }
+		  
+		  if ( (Sudoku::SolveSudoku(grid_1)) && (Sudoku::SolveBackwards(grid_2)) )
+		  {
+			 for (row=0; row<N; row ++)
+			 {
+				for (col=0; col<N; col++)
+				{
+				   if (grid_1[row][col] != grid_2[row][col])
+					  restart=0;
+				}
+			 }
+		  }
+	   }
+	}while(restart);
+
 	Sudoku::PrintGrid2(grid);
+
 }
 //--------------GIVE QUESTION--------------------
