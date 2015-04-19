@@ -28,7 +28,7 @@ bool SolveSudoku (int grid[N][N])
 	  {
 		 grid[row][col]= num;
 		 
-		 cout << "Once" << " " << row << " " << col << " " << num << endl;
+//		 cout << "Once" << " " << row << " " << col << " " << num << endl;
 
 		 if (SolveSudoku(grid))
 			return true;
@@ -148,10 +148,18 @@ int main()
 		 grid_1[row][col]=grid[row][col];
    }
 
-   if (SolveSudoku(grid) != true)
-   {
-	  cout << "0" << endl;
-   }
+   cout << "---grid---" <<endl;
+
+   PrintGrid(grid);
+
+   cout << "---grid1---" << endl;
+
+   PrintGrid(grid_1);
+
+ //  if (SolveSudoku(grid) != true)
+ //  {
+//	  cout << "0" << endl;
+ //  }
 
    if ((SolveSudoku(grid)) && (SolveBackwards(grid_1)))
    {
@@ -168,7 +176,11 @@ int main()
 		 
 	  }
    }
-   
+   cout << "---grid---" <<endl;
+   PrintGrid(grid);
+
+   cout << "---grid1---" << endl;
+   PrintGrid(grid_1);
  if (check == 1)
    {
    if ((SolveSudoku(grid)) && (SolveBackwards(grid_1)))
