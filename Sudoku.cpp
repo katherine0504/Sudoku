@@ -142,8 +142,6 @@ void Sudoku::Solve(void)
    {
 	  for (col=0; col< N; col++)
 	  {
-//		 grid_1[row][col]=ReadIngrid[row][col];
-//		 grid_2[row][col]=ReadIngrid[row][col];
 		 grid_temp[row][col]=ReadIngrid[row][col];
 	  }
    }
@@ -157,6 +155,8 @@ void Sudoku::Solve(void)
 		 ReadIngrid[row][col]=grid_temp[row][col];
 	  }
    }
+
+   Sudoku::PrintGrid(grid_1);
 
    Sudoku::SolveBackwards();
    for (row= 0; row< N; row++)
